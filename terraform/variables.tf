@@ -6,6 +6,8 @@ variable "env_name" {}
 
 variable "base_domain_name" {}
 
+variable "operator_cidr_blocks" {}
+
 variable "bucket_region" {
   default = "eu-west-2"
 }

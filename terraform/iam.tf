@@ -9,7 +9,7 @@ resource "aws_iam_role_policy_attachment" "blue_ocean_eks_cluster_AmazonEKSClust
   role       = "${aws_iam_role.blue_ocean_eks_cluster.name}"
 }
 
-resource "aws_iam_role" "blue_ocean_eks_cluster_AmazonEKSServicePolicy" {
+resource "aws_iam_role_policy_attachment" "blue_ocean_eks_cluster_AmazonEKSServicePolicy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSServicePolicy"
   role       = "${aws_iam_role.blue_ocean_eks_cluster.name}"
 }
