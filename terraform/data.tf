@@ -21,7 +21,7 @@ data "aws_route53_zone" "base_domain" {
   name = "${var.base_domain_name}"
 }
 
-data "aws_ami" "eks-worker" {
+data "aws_ami" "eks_worker" {
   filter {
     name   = "name"
     values = ["amazon-eks-node-v*"]
