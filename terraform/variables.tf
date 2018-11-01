@@ -8,6 +8,11 @@ variable "base_domain_name" {}
 
 variable "operator_cidr_blocks" {}
 
+variable "cluster_name" {
+  description = "The name of our cluster"
+  default     = "${var.env_name}-jenkins-blue-ocean"
+}
+
 variable "bucket_region" {
   default = "eu-west-2"
 }

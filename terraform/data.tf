@@ -20,3 +20,13 @@ data "terraform_remote_state" "infrastructure" {
 data "aws_route53_zone" "base_domain" {
   name = "${var.base_domain_name}"
 }
+
+data "aws_ami" "eks-worker" {
+  filter {
+    name   = "name"
+    values = ["amazon-eks-node-v*"]
+  }
+
+  most_recent = true
+  owners      = ["602401143452"] # Amazon EKS AMI Account ID
+}
