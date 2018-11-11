@@ -13,6 +13,11 @@ variable "cluster_name" {
   default     = "${var.env_name}-jenkins-blue-ocean"
 }
 
+variable "infra_module" {
+  description = "The infrastructure module we're using"
+  default     = ["high-availability", "single-az"]
+}
+
 variable "bucket_region" {
   default = "eu-west-2"
 }
