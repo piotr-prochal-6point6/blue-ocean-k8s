@@ -6,7 +6,7 @@ resource "aws_launch_configuration" "blue_ocean_eks" {
   instance_type               = "m4.large"
   name_prefix                 = "blue-ocean-eks-node"
   security_groups             = ["${aws_security_group.blue_ocean_node.id}"]
-  user_data_base64            = "${base64encode(${file(../userdata/worker_node_userdata.sh)})}"
+  user_data_base64            = "${base64encode(file("../userdata/worker_node_userdata.sh"))}"
 
   lifecycle {
     create_before_destroy = true

@@ -14,8 +14,7 @@ variable "cluster_name" {
 }
 
 variable "infra_module" {
-  description = "The infrastructure module we're using"
-  default     = ["high-availability", "single-az"]
+  description = "The infrastructure module we're using - e.g. high-availability or single-az"
 }
 
 variable "bucket_region" {
