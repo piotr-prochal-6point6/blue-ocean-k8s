@@ -38,3 +38,13 @@ resource "aws_iam_instance_profile" "blue_ocean_eks_node" {
   name = "blue-ocean-eks"
   role = "${aws_iam_role.blue_ocean_eks_node.name}"
 }
+
+resource "aws_ecr_repository_policy" "internal_repo_policy" {
+  repository = "${aws_ecr_repository.internal.name}"
+  policy     = "${file("../iam/ecr_repository_policy.json")}"
+}
+
+resource "aws_ecr_lifecycle_policy" "internal" {
+  repository = "${aws_ecr_repository.internal.name}"
+  policy     = "${file("../iam/ecr_lifecycle_policy.json")}"
+}
