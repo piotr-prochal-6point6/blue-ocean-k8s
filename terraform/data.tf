@@ -17,6 +17,16 @@ data "terraform_remote_state" "infrastructure" {
   }
 }
 
+data "template_file" "worker_userdata" {
+  template = "${file("../userdata/worker_node_userdata.sh.tpl")}"
+
+  vars {
+    cluster_endpoint = "${aws_eks_cluster.blue_ocean.endpoint}"
+    cert_authority   = "${aws_eks_cluster.blue_ocean.certificate_authority.0.data}"
+    cluster_name     = "${aws_eks_cluster.blue_ocean.name}"
+  }
+}
+
 data "aws_route53_zone" "base_domain" {
   name = "${var.base_domain_name}"
 }
