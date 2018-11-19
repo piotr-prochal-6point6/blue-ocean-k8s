@@ -13,6 +13,11 @@ variable "cluster_base_name" {
   default     = "jenkins-blue-ocean"
 }
 
+variable "node_instance_type" {
+  description = "EKS worker node instance type"
+  default     = "m4.large"
+}
+
 variable "bucket_region" {
   default = "eu-west-2"
 }

@@ -14,7 +14,7 @@ resource "aws_autoscaling_group" "blue_ocean_eks" {
   }
 
   tag {
-    key                 = "kubernetes.io/cluster/${var.cluster_name}"
+    key                 = "kubernetes.io/cluster/${aws_eks_cluster.blue_ocean.name}"
     value               = "owned"
     propagate_at_launch = true
   }
