@@ -1,6 +1,6 @@
 #EKS cluster lead
 resource "aws_eks_cluster" "blue_ocean" {
-  name     = "${var.env_name}-${var.cluster_name}"
+  name     = "${var.env_name}-${var.cluster_base_name}"
   role_arn = "${aws_iam_role.blue_ocean_eks_cluster.arn}"
 
   vpc_config {

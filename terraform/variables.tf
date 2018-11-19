@@ -8,13 +8,9 @@ variable "base_domain_name" {}
 
 variable "operator_cidr_blocks" {}
 
-variable "cluster_name" {
-  description = "The name of our cluster"
+variable "cluster_base_name" {
+  description = "The base name of our cluster"
   default     = "jenkins-blue-ocean"
-}
-
-variable "infra_module" {
-  description = "The infrastructure module we're using - e.g. high-availability or single-az"
 }
 
 variable "bucket_region" {
