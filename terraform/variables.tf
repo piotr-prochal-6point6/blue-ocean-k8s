@@ -10,7 +10,7 @@ variable "operator_cidr_blocks" {}
 
 variable "cluster_name" {
   description = "The name of our cluster"
-  default     = "${var.env_name}-jenkins-blue-ocean"
+  default     = "jenkins-blue-ocean"
 }
 
 variable "infra_module" {
