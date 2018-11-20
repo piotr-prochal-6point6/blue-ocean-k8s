@@ -27,9 +27,9 @@ data "template_file" "worker_userdata" {
   }
 }
 
-data "aws_route53_zone" "base_domain" {
-  name = "${var.base_domain_name}"
-}
+#data "aws_route53_zone" "base_domain" {
+#  name = "${var.base_domain_name}"
+#}
 
 data "aws_ami" "eks_worker" {
   filter {

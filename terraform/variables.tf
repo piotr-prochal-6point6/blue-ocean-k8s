@@ -4,7 +4,7 @@ variable "aws_region" {
 
 variable "env_name" {}
 
-variable "base_domain_name" {}
+#variable "base_domain_name" {}
 
 variable "operator_cidr_blocks" {}
 
