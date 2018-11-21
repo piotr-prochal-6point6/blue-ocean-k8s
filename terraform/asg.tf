@@ -1,8 +1,7 @@
 #Autoscaling Groups
 resource "aws_autoscaling_group" "blue_ocean_eks" {
-  desired_capacity     = 2
   launch_configuration = "${aws_launch_configuration.blue_ocean_eks.id}"
-  max_size             = 2
+  max_size             = 6
   min_size             = 1
   name                 = "blue-ocean-eks"
   vpc_zone_identifier  = ["${data.terraform_remote_state.infrastructure.private_subnet_ids}"]

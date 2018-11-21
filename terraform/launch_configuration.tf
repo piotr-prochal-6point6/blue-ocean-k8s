@@ -7,12 +7,16 @@ resource "aws_launch_configuration" "blue_ocean_eks" {
   name_prefix                 = "blue-ocean-eks-node-"
   security_groups             = ["${aws_security_group.blue_ocean_cluster_node.id}"]
   user_data_base64            = "${base64encode(data.template_file.worker_userdata.rendered)}"
+  ebs_optimized               = true
 
   lifecycle {
     create_before_destroy = true
   }
 
-  root_block_device {
+  ebs_block_device {
+    device_name           = "/dev/sdg"
+    volume_type           = "gp2"
+    volume_size           = 120
     delete_on_termination = true
   }
 }
