@@ -1,4 +1,4 @@
-output "config-eks" {
+output "config.eks" {
   value = "${local.config_eks}"
 }
 
