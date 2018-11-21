@@ -1,5 +1,5 @@
 locals {
-  kubeconfig = <<KUBECONFIG
+  config_eks = <<KUBECONFIG
 
 
 apiVersion: v1

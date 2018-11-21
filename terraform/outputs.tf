@@ -1,5 +1,5 @@
-output "kubeconfig" {
-  value = "${local.kubeconfig}"
+output "config-eks" {
+  value = "${local.config_eks}"
 }
 
 output "config-map-aws-auth" {
