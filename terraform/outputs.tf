@@ -2,7 +2,7 @@ output "kubeconfig" {
   value = "${local.kubeconfig}"
 }
 
-output "config_map_aws_auth" {
+output "config-map-aws-auth" {
   value = "${local.config_map_aws_auth}"
 }
 
@@ -10,7 +10,7 @@ output "storageclass" {
   value = "${local.storageclass}"
 }
 
-output "rbac_config" {
+output "rbac-config" {
   value = "${local.rbac_config}"
 }
 
