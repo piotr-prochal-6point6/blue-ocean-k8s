@@ -8,6 +8,7 @@ OUTPUTS="config-map-aws-auth storageclass rbac-config"
 
 cd ${PARENT_DIR}/terraform
 terraform output ${KUBECONFIG} > ${KUBE_HOME}/${KUBECONFIG}
+rm ${KUBE_HOME}/config
 ln -s ${KUBE_HOME}/${KUBECONFIG} ${KUBE_HOME}/config
 
 # Create tiller service account
