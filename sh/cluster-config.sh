@@ -29,6 +29,6 @@ kubectl patch storageclass gp2 -p '{"metadata": {"annotations":{"storageclass.ku
 kubectl get storageclass
 
 # Initialise Helm
-helm init --service-account tiller
+#helm init --service-account tiller
 
 echo "Basic cluster configuration complete!"
