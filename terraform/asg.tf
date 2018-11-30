@@ -3,7 +3,8 @@ resource "aws_autoscaling_group" "blue_ocean_eks" {
   launch_configuration = "${aws_launch_configuration.blue_ocean_eks.id}"
   max_size             = 6
   min_size             = 1
-  name                 = "blue-ocean-eks"
+  desired_capacity     = 1
+  name_prefix          = "${var.env_name}-blue-ocean-eks-node-"
   vpc_zone_identifier  = ["${data.terraform_remote_state.infrastructure.private_subnet_ids}"]
   load_balancers       = ["${aws_elb.external.id}"]
 

@@ -5,7 +5,7 @@ resource "aws_autoscaling_policy" "eks_scale_up" {
   policy_type            = "SimpleScaling"
   scaling_adjustment     = 1
   adjustment_type        = "ChangeInCapacity"
-  cooldown               = 300
+  cooldown               = 1200
 }
 
 resource "aws_autoscaling_policy" "eks_scale_down" {
@@ -14,5 +14,5 @@ resource "aws_autoscaling_policy" "eks_scale_down" {
   policy_type            = "SimpleScaling"
   scaling_adjustment     = -1
   adjustment_type        = "ChangeInCapacity"
-  cooldown               = 600
+  cooldown               = 2400
 }
