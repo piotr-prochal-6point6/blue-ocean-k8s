@@ -1,11 +1,16 @@
 locals {
   deployment = <<EOF
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: blueocean-master
+  labels:
+    app: blueocean
 spec:
-  replicas: 3
+  replicas: 1
+  selector:
+    matchLabels:
+      app: blueocean
   template:
     metadata:
       labels:
