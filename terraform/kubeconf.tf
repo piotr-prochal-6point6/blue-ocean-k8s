@@ -1,7 +1,5 @@
 locals {
   config_eks = <<KUBECONFIG
-
-
 apiVersion: v1
 clusters:
 - cluster:

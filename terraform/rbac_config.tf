@@ -1,6 +1,5 @@
 locals {
   rbac_config = <<EOF
-
 apiVersion: v1
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1beta1
