@@ -14,7 +14,7 @@ resource "aws_launch_configuration" "blue_ocean_eks" {
 
   root_block_device {
     volume_type           = "gp2"
-    volume_size           = 120
+    volume_size           = 240
     delete_on_termination = true
   }
 }
