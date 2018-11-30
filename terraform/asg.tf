@@ -5,6 +5,7 @@ resource "aws_autoscaling_group" "blue_ocean_eks" {
   min_size             = 1
   name                 = "blue-ocean-eks"
   vpc_zone_identifier  = ["${data.terraform_remote_state.infrastructure.private_subnet_ids}"]
+  load_balancers       = ["${aws_elb.external.id}"]
 
   tag {
     key                 = "Name"
