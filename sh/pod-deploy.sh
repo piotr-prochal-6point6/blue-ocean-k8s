@@ -9,8 +9,8 @@ kubectl create service nodeport nginx --tcp=80:80
 
 cd ${PARENT_DIR}/terraform
 
-terraform output nginx.conf > ${KUBE_HOME}/nginx.conf
-kubectl create configmap confnginx --from-file ${KUBE_HOME}/nginx.conf
+terraform output nginx.conf > ${PARENT_DIR}/kube/nginx.conf
+kubectl create configmap confnginx --from-file ${PARENT_DIR}/kube/nginx.conf
 
 for conf in ${YAMLS}
 do
