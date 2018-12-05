@@ -2,3 +2,5 @@
 *.plan
 *.tfstate
 *.backup
+config-map-aws-auth.yml
+nginx.conf
