@@ -14,14 +14,6 @@ output "ecr_repo_url" {
   value = "${aws_ecr_repository.internal.repository_url}"
 }
 
-output "blue-ocean-pod-def" {
-  value = "${local.blue_ocean}"
-}
-
-output "blue-ocean-deployment" {
-  value = "${local.deployment}"
-}
-
 output "nginx.conf" {
   value = "${local.nginxconf}"
 }
