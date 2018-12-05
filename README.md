@@ -6,7 +6,7 @@
 
     cd terraform
     terraform init -backend-config=backend-config/<env_name>
-    terraform plan -var env_name=<env_name> -var operator_cidr_blocks=<operator_cidr_blocks> -var base_domain_name=<base_domain_name> -out <env_name>.plan
+    terraform plan -var-file=vars/<env_name>.tfvars -out <env_name>.plan
     terraform apply <env_name>.plan
     ../sh/cluster-config.sh
     ../sh/pod-deploy.sh
@@ -14,8 +14,6 @@
 #### To destroy
 
     cd terraform
-    terraform destroy -var env_name=<env_name> -var operator_cidr_blocks=<operator_cidr_blocks> -var base_domain_name=<base_domain_name> -auto-approve
+    terraform destroy -var-file=vars/<env_name>.tfvars -auto-approve
 
-The toolset provides:
-
-_TODO: List of components and tools provided here_
+_N.B. the tfvars files must be populated before planning_
