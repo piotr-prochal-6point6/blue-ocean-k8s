@@ -50,12 +50,12 @@ jobs:
         context: docker
         push: false
         load: true
-        tags: localhost:5000/${{ env.DOCKER_HUB_IMAGE_NAME }}:${{ steps.git_hash.outputs.GIT_HASH_SHORT }}
+        tags: ${{ env.DOCKER_HUB_NAMESPACE }}/${{ env.DOCKER_HUB_IMAGE_NAME }}:${{ steps.git_hash.outputs.GIT_HASH_SHORT }}
     
     - name: Inspect image
       id: inspect
       run: |
-        echo ::set-output name=REPORT::$(docker buildx imagetools inspect localhost:5000/${{ env.DOCKER_HUB_IMAGE_NAME }}:${{ steps.git_hash.outputs.GIT_HASH_SHORT }})
+        echo ::set-output name=REPORT::$(docker buildx imagetools inspect ${{ env.DOCKER_HUB_NAMESPACE }}/${{ env.DOCKER_HUB_IMAGE_NAME }}:${{ steps.git_hash.outputs.GIT_HASH_SHORT }})
 
     - name: Image inspect report -> PR comment
       uses: allthatjazzleo/actions-pull-request-add-comment@v1
@@ -66,7 +66,7 @@ jobs:
     - name: Scan image
       id: scan
       run: |
-        echo :: set-output name=REPORT::$(docker scan localhost:5000/${{ env.DOCKER_HUB_IMAGE_NAME }}:${{ steps.git_hash.outputs.GIT_HASH_SHORT }} -f docker/Dockerfile)
+        echo :: set-output name=REPORT::$(docker scan ${{ env.DOCKER_HUB_NAMESPACE }}/${{ env.DOCKER_HUB_IMAGE_NAME }}:${{ steps.git_hash.outputs.GIT_HASH_SHORT }} -f docker/Dockerfile)
 
     - name: Image scane report -> PR comment
       uses: allthatjazzleo/actions-pull-request-add-comment@v1
