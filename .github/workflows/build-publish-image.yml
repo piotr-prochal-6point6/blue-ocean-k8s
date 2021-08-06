@@ -21,7 +21,7 @@ jobs:
   image_validate:
     name: Validate Docker Image
     runs-on: ubuntu-latest
-    if: github.event.pull_request.closed != true && github.event.pull_request.merged != true
+    if: github.event.pull_request.closed == false && github.event.pull_request.merged == false
     steps:
 
     - name: Checkout
@@ -60,12 +60,12 @@ jobs:
       uses: allthatjazzleo/actions-pull-request-add-comment@v1
       with:
         message: |
-          'Docker Buildx Inspect Report:
+          '# Docker Buildx Inspect Report:
           ${{ steps.inspect.outputs.REPORT }}'
         GITHUB_TOKEN: ${{ github.token }}
 
   image_build_publish:
-    name: Build & Publish Docker Image
+    name: Build Docker Image
     runs-on: ubuntu-latest
     if: github.event.pull_request.closed == true && github.event.pull_request.merged == true
     steps:
