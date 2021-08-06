@@ -98,3 +98,4 @@ jobs:
         tags: |
           ${{ env.DOCKER_HUB_NAMESPACE }}/${{ env.DOCKER_HUB_IMAGE_NAME }}:${{ steps.semver.outputs.SEM_VER }},
           ${{ env.DOCKER_HUB_NAMESPACE }}/${{ env.DOCKER_HUB_IMAGE_NAME }}:latest
+          
