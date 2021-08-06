@@ -44,12 +44,11 @@ jobs:
         username: ${{ secrets.DOCKER_HUB_USER }}
         password: ${{ secrets.DOCKER_HUB_PASS }}
 
-    - name: Build Docker image locally
+    - name: Build Docker image for validation
       uses: docker/build-push-action@v2.6.1
       with:
         context: docker
-        push: false
-        load: true
+        push: true
         tags: ${{ env.DOCKER_HUB_NAMESPACE }}/${{ env.DOCKER_HUB_IMAGE_NAME }}:${{ steps.git_hash.outputs.GIT_HASH_SHORT }}
     
     - name: Inspect image
@@ -84,11 +83,6 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2.3.4
 
-    - name: Get git hash
-      id: git_hash
-      run: |
-        echo ::set-output name=GIT_HASH_SHORT::$(git rev-parse --verify --short HEAD)
-
     - name: Get Semantic Version
       id: semver
       run: |
@@ -111,4 +105,4 @@ jobs:
       with:
         context: docker
         push: true
-        tags: ${{ env.DOCKER_HUB_NAMESPACE }}/${{ env.DOCKER_HUB_IMAGE_NAME }}:${{ steps.git_hash.outputs.GIT_HASH_SHORT }} ${{ env.DOCKER_HUB_NAMESPACE }}/${{ env.DOCKER_HUB_IMAGE_NAME }}:${{ steps.semver.outputs.SEM_VER }} ${{ env.DOCKER_HUB_NAMESPACE }}/${{ env.DOCKER_HUB_IMAGE_NAME }}:latest
+        tags: ${{ env.DOCKER_HUB_NAMESPACE }}/${{ env.DOCKER_HUB_IMAGE_NAME }}:${{ steps.semver.outputs.SEM_VER }} ${{ env.DOCKER_HUB_NAMESPACE }}/${{ env.DOCKER_HUB_IMAGE_NAME }}:latest
