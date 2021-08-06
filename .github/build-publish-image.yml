@@ -1,0 +1,111 @@
+name: Build & Publish Docker Image
+
+on:
+  pull_request:
+    branches:
+      - master
+    paths:
+      - 'docker/'
+    types:
+      - opened
+      - closed
+      - synchronize
+
+env:
+  DOCKER_HUB_NAMESPACE: hfoster
+  DOCKER_HUB_IMAGE_NAME: blueocean-k8s
+
+jobs:
+  image_validate:
+    name: Validate Docker Image
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.closed != true && github.event.pull_request.merged != true
+    steps:
+
+    - name: Checkout
+      uses: actions/checkout@v2.3.4
+
+    - name: Setup Buildx for Docker
+      uses: docker/setup-buildx-action@v1.5.1
+      with:
+        version: latest
+        install: true
+
+    - name: Get git hash
+      id: git_hash
+      run: |
+        echo ::set-output name=GIT_HASH_SHORT::$(git rev-parse --verify --short HEAD)
+
+    - name: Docker Login
+      uses: docker/login-action@v1.10.0
+      with:
+        username: ${{ secrets.DOCKER_HUB_USER }}
+        password: ${{ secrets.DOCKER_HUB_PASS }}
+
+    - name: Build Docker image locally
+      uses: docker/build-push-action@v2.6.1
+      with:
+        context: docker/
+        push: true
+        tags: localhost:5000/${{ env.DOCKER_HUB_IMAGE_NAME }}:${{ steps.git_hash.outputs.GIT_HASH_SHORT }}
+    
+    - name: Inspect image
+      id: inspect
+      run: |
+        echo ::set-output name=REPORT::$(docker buildx imagetools inspect localhost:5000/${{ env.DOCKER_HUB_IMAGE_NAME }}:${{ steps.git_hash.outputs.GIT_HASH_SHORT }})
+
+    - name: Image inspect report -> PR comment
+      uses: allthatjazzleo/actions-pull-request-add-comment@v1
+      with:
+        message: ${{ steps.inspect.outputs.REPORT }}
+        GITHUB_TOKEN: ${{ github.token }}
+
+    - name: Scan image
+      id: scan
+      run: |
+        echo :: set-output name=REPORT::$(docker scan localhost:5000/${{ env.DOCKER_HUB_IMAGE_NAME }}:${{ steps.git_hash.outputs.GIT_HASH_SHORT }} -f docker/Dockerfile)
+
+    - name: Image scane report -> PR comment
+      uses: allthatjazzleo/actions-pull-request-add-comment@v1
+      with:
+        message: ${{ steps.scan.outputs.REPORT }}
+        GITHUB_TOKEN: ${{ github.token }}
+
+
+  image_build_publish:
+    name: Build & Publish Docker Image
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.closed == true && github.event.pull_request.merged == true
+    steps:
+
+    - name: Checkout
+      uses: actions/checkout@v2.3.4
+
+    - name: Get git hash
+      id: git_hash
+      run: |
+        echo ::set-output name=GIT_HASH_SHORT::$(git rev-parse --verify --short HEAD)
+
+    - name: Get Semantic Version
+      id: semver
+      run: |
+        echo ::set-output name=SEM_VER::$(cat docker/semver)
+
+    - name: Docker Login
+      uses: docker/login-action@v1.10.0
+      with:
+        username: ${{ secrets.DOCKER_HUB_USER }}
+        password: ${{ secrets.DOCKER_HUB_PASS }}
+
+    - name: Setup Buildx for Docker
+      uses: docker/setup-buildx-action@v1.5.1
+      with:
+        version: latest
+        install: true
+
+    - name: Build & Publish Docker Image
+      uses: docker/build-push-action@v2.6.1
+      with:
+        context: docker/
+        push: true
+        tags: ${{ env.DOCKER_HUB_NAMESPACE }}/${{ env.DOCKER_HUB_IMAGE_NAME }}:${{ steps.git_hash.outputs.GIT_HASH_SHORT }} ${{ env.DOCKER_HUB_NAMESPACE }}/${{ env.DOCKER_HUB_IMAGE_NAME }}:${{ steps.semver.outputs.SEM_VER }} ${{ env.DOCKER_HUB_NAMESPACE }}/${{ env.DOCKER_HUB_IMAGE_NAME }}:latest
