@@ -44,35 +44,25 @@ jobs:
         username: ${{ secrets.DOCKER_HUB_USER }}
         password: ${{ secrets.DOCKER_HUB_PASS }}
 
-    - name: Build Docker image locally
+    - name: Build Docker image for validation
       uses: docker/build-push-action@v2.6.1
       with:
-        context: docker/
+        context: docker
         push: true
-        tags: localhost:5000/${{ env.DOCKER_HUB_IMAGE_NAME }}:${{ steps.git_hash.outputs.GIT_HASH_SHORT }}
+        tags: ${{ env.DOCKER_HUB_NAMESPACE }}/${{ env.DOCKER_HUB_IMAGE_NAME }}:${{ steps.git_hash.outputs.GIT_HASH_SHORT }}
     
     - name: Inspect image
       id: inspect
       run: |
-        echo ::set-output name=REPORT::$(docker buildx imagetools inspect localhost:5000/${{ env.DOCKER_HUB_IMAGE_NAME }}:${{ steps.git_hash.outputs.GIT_HASH_SHORT }})
+        echo ::set-output name=REPORT::$(docker buildx imagetools inspect ${{ env.DOCKER_HUB_NAMESPACE }}/${{ env.DOCKER_HUB_IMAGE_NAME }}:${{ steps.git_hash.outputs.GIT_HASH_SHORT }})
 
     - name: Image inspect report -> PR comment
       uses: allthatjazzleo/actions-pull-request-add-comment@v1
       with:
-        message: ${{ steps.inspect.outputs.REPORT }}
+        message: |
+          'Docker Buildx Inspect Report:
+          ${{ steps.inspect.outputs.REPORT }}'
         GITHUB_TOKEN: ${{ github.token }}
-
-    - name: Scan image
-      id: scan
-      run: |
-        echo :: set-output name=REPORT::$(docker scan localhost:5000/${{ env.DOCKER_HUB_IMAGE_NAME }}:${{ steps.git_hash.outputs.GIT_HASH_SHORT }} -f docker/Dockerfile)
-
-    - name: Image scane report -> PR comment
-      uses: allthatjazzleo/actions-pull-request-add-comment@v1
-      with:
-        message: ${{ steps.scan.outputs.REPORT }}
-        GITHUB_TOKEN: ${{ github.token }}
-
 
   image_build_publish:
     name: Build & Publish Docker Image
@@ -82,11 +72,6 @@ jobs:
 
     - name: Checkout
       uses: actions/checkout@v2.3.4
-
-    - name: Get git hash
-      id: git_hash
-      run: |
-        echo ::set-output name=GIT_HASH_SHORT::$(git rev-parse --verify --short HEAD)
 
     - name: Get Semantic Version
       id: semver
@@ -108,6 +93,6 @@ jobs:
     - name: Build & Publish Docker Image
       uses: docker/build-push-action@v2.6.1
       with:
-        context: docker/
+        context: docker
         push: true
-        tags: ${{ env.DOCKER_HUB_NAMESPACE }}/${{ env.DOCKER_HUB_IMAGE_NAME }}:${{ steps.git_hash.outputs.GIT_HASH_SHORT }} ${{ env.DOCKER_HUB_NAMESPACE }}/${{ env.DOCKER_HUB_IMAGE_NAME }}:${{ steps.semver.outputs.SEM_VER }} ${{ env.DOCKER_HUB_NAMESPACE }}/${{ env.DOCKER_HUB_IMAGE_NAME }}:latest
+        tags: ${{ env.DOCKER_HUB_NAMESPACE }}/${{ env.DOCKER_HUB_IMAGE_NAME }}:${{ steps.semver.outputs.SEM_VER }} ${{ env.DOCKER_HUB_NAMESPACE }}/${{ env.DOCKER_HUB_IMAGE_NAME }}:latest
