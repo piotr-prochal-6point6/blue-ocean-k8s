@@ -47,8 +47,9 @@ jobs:
     - name: Build Docker image locally
       uses: docker/build-push-action@v2.6.1
       with:
-        context: docker/
-        push: true
+        context: docker
+        push: false
+        load: true
         tags: localhost:5000/${{ env.DOCKER_HUB_IMAGE_NAME }}:${{ steps.git_hash.outputs.GIT_HASH_SHORT }}
     
     - name: Inspect image
@@ -108,6 +109,6 @@ jobs:
     - name: Build & Publish Docker Image
       uses: docker/build-push-action@v2.6.1
       with:
-        context: docker/
+        context: docker
         push: true
         tags: ${{ env.DOCKER_HUB_NAMESPACE }}/${{ env.DOCKER_HUB_IMAGE_NAME }}:${{ steps.git_hash.outputs.GIT_HASH_SHORT }} ${{ env.DOCKER_HUB_NAMESPACE }}/${{ env.DOCKER_HUB_IMAGE_NAME }}:${{ steps.semver.outputs.SEM_VER }} ${{ env.DOCKER_HUB_NAMESPACE }}/${{ env.DOCKER_HUB_IMAGE_NAME }}:latest
