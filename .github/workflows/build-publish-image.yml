@@ -59,20 +59,10 @@ jobs:
     - name: Image inspect report -> PR comment
       uses: allthatjazzleo/actions-pull-request-add-comment@v1
       with:
-        message: ${{ steps.inspect.outputs.REPORT }}
+        message: |
+          'Docker Buildx Inspect Report:
+          ${{ steps.inspect.outputs.REPORT }}'
         GITHUB_TOKEN: ${{ github.token }}
-
-    - name: Scan image
-      id: scan
-      run: |
-        echo :: set-output name=REPORT::$(docker scan ${{ env.DOCKER_HUB_NAMESPACE }}/${{ env.DOCKER_HUB_IMAGE_NAME }}:${{ steps.git_hash.outputs.GIT_HASH_SHORT }} -f docker/Dockerfile)
-
-    - name: Image scane report -> PR comment
-      uses: allthatjazzleo/actions-pull-request-add-comment@v1
-      with:
-        message: ${{ steps.scan.outputs.REPORT }}
-        GITHUB_TOKEN: ${{ github.token }}
-
 
   image_build_publish:
     name: Build & Publish Docker Image
