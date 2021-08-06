@@ -95,4 +95,7 @@ jobs:
       with:
         context: docker
         push: true
-        tags: ${{ env.DOCKER_HUB_NAMESPACE }}/${{ env.DOCKER_HUB_IMAGE_NAME }}:${{ steps.semver.outputs.SEM_VER }} ${{ env.DOCKER_HUB_NAMESPACE }}/${{ env.DOCKER_HUB_IMAGE_NAME }}:latest
+        tags: |
+          ${{ env.DOCKER_HUB_NAMESPACE }}/${{ env.DOCKER_HUB_IMAGE_NAME }}:${{ steps.semver.outputs.SEM_VER }},
+          ${{ env.DOCKER_HUB_NAMESPACE }}/${{ env.DOCKER_HUB_IMAGE_NAME }}:latest
+          
