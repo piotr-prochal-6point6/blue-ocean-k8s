@@ -29,7 +29,7 @@ services:
     volumes:
      - run:/var/run
      - jenkins-docker-certs:/certs/client
-     - jenkins-data:/var/jenkins_home
+     - jenkins-data:/var/jenkins/home
     environment:
      - DOCKER_TLS_CERTDIR=/certs
     deploy:
