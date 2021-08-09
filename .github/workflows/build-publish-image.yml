@@ -72,17 +72,6 @@ jobs:
         args: --file=docker/Dockerfile
       env:
         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-    
-    - name: Delete CI run tag
-      uses: m3ntorship/action-dockerhub-cleanup@1.4
-      with:
-        username: ${{ secrets.DOCKER_HUB_USER }}
-        password: ${{ secrets.DOCKER_HUB_PASS }}
-        user: ${{ secrets.DOCKER_HUB_USER }}
-        repos: ${{ env.DOCKER_HUB_NAMESPACE }}/${{ env.DOCKER_HUB_IMAGE_NAME }}
-        substrings: ci-build-${{ steps.git_hash.outputs.GIT_HASH_SHORT }}, ci-build-
-        keep-last: 2
-      continue-on-error: true
 
   image_build_publish:
     name: Build Docker Image
