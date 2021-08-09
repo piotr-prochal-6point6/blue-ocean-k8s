@@ -31,6 +31,8 @@ services:
      - jenkins-data:/var/jenkins_home
     environment:
      - DOCKER_TLS_CERTDIR=/certs
+    deploy:
+      mode: global
 
 volumes:
 
