@@ -3,7 +3,7 @@ services:
 
   jenkins-blueocean:
     build: 
-      context: ../../docker
+      context: ../docker
     ports:
       - "8080:8080"
       - "50000:50000"
