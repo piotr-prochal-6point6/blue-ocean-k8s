@@ -68,14 +68,14 @@ jobs:
       uses: snyk/actions/docker@master
       continue-on-error: true
       with:
-        image: ${{ env.DOCKER_HUB_NAMESPACE }}/${{ env.DOCKER_HUB_IMAGE_NAME }}:${{ steps.git_hash.outputs.GIT_HASH_SHORT }})
+        image: ${{ env.DOCKER_HUB_NAMESPACE }}/${{ env.DOCKER_HUB_IMAGE_NAME }}:${{ steps.git_hash.outputs.GIT_HASH_SHORT }}
         args: --file=docker/Dockerfile
       env:
         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
     
     - name: Delete CI run tag
       run: |
-        docker rmi --force ${{ env.DOCKER_HUB_NAMESPACE }}/${{ env.DOCKER_HUB_IMAGE_NAME }}:${{ steps.git_hash.outputs.GIT_HASH_SHORT }})
+        docker rmi --force ${{ env.DOCKER_HUB_NAMESPACE }}/${{ env.DOCKER_HUB_IMAGE_NAME }}:${{ steps.git_hash.outputs.GIT_HASH_SHORT }}
       continue-on-error: true
 
   image_build_publish:
