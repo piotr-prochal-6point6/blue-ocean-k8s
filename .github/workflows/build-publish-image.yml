@@ -55,7 +55,7 @@ jobs:
       id: inspect
       run: |
         echo ::set-output name=REPORT::$(docker buildx imagetools inspect ${{ env.DOCKER_HUB_NAMESPACE }}/${{ env.DOCKER_HUB_IMAGE_NAME }}:${{ steps.git_hash.outputs.GIT_HASH_SHORT }})
-
+    
     - name: Image inspect report -> PR comment
       uses: allthatjazzleo/actions-pull-request-add-comment@v1
       with:
@@ -63,6 +63,14 @@ jobs:
           Docker Buildx Inspect Report:
           ${{ steps.inspect.outputs.REPORT }}
         GITHUB_TOKEN: ${{ github.token }}
+
+    - name: Scan Image
+      uses: snyk/actions/docker@master
+      with:
+        image: ${{ env.DOCKER_HUB_NAMESPACE }}/${{ env.DOCKER_HUB_IMAGE_NAME }}:${{ steps.git_hash.outputs.GIT_HASH_SHORT }})
+        args: --file=docker/Dockerfile
+      env:
+        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
   image_build_publish:
     name: Build Docker Image
