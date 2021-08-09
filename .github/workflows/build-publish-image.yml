@@ -49,18 +49,18 @@ jobs:
       with:
         context: docker
         push: true
-        tags: ${{ env.DOCKER_HUB_NAMESPACE }}/${{ env.DOCKER_HUB_IMAGE_NAME }}:${{ steps.git_hash.outputs.GIT_HASH_SHORT }}
+        tags: ${{ env.DOCKER_HUB_NAMESPACE }}/${{ env.DOCKER_HUB_IMAGE_NAME }}:ci-build-${{ steps.git_hash.outputs.GIT_HASH_SHORT }}
     
     - name: Inspect image
       id: inspect
       run: |
-        echo ::set-output name=REPORT::$(docker buildx imagetools inspect ${{ env.DOCKER_HUB_NAMESPACE }}/${{ env.DOCKER_HUB_IMAGE_NAME }}:${{ steps.git_hash.outputs.GIT_HASH_SHORT }})
+        echo ::set-output name=REPORT::$(docker buildx imagetools inspect ${{ env.DOCKER_HUB_NAMESPACE }}/${{ env.DOCKER_HUB_IMAGE_NAME }}:ci-build-${{ steps.git_hash.outputs.GIT_HASH_SHORT }})
     
     - name: Image inspect report -> PR comment
       uses: allthatjazzleo/actions-pull-request-add-comment@v1
       with:
         message: |
-          Docker Buildx Inspect Report:
+          Docker Buildx Inspect Report for ${{ env.DOCKER_HUB_NAMESPACE }}/${{ env.DOCKER_HUB_IMAGE_NAME }}:ci-build-${{ steps.git_hash.outputs.GIT_HASH_SHORT }}:
           ${{ steps.inspect.outputs.REPORT }}
         GITHUB_TOKEN: ${{ github.token }}
 
@@ -68,14 +68,14 @@ jobs:
       uses: snyk/actions/docker@master
       continue-on-error: true
       with:
-        image: ${{ env.DOCKER_HUB_NAMESPACE }}/${{ env.DOCKER_HUB_IMAGE_NAME }}:${{ steps.git_hash.outputs.GIT_HASH_SHORT }}
+        image: ${{ env.DOCKER_HUB_NAMESPACE }}/${{ env.DOCKER_HUB_IMAGE_NAME }}:ci-build-${{ steps.git_hash.outputs.GIT_HASH_SHORT }}
         args: --file=docker/Dockerfile
       env:
         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
     
     - name: Delete CI run tag
       run: |
-        docker rmi --force ${{ env.DOCKER_HUB_NAMESPACE }}/${{ env.DOCKER_HUB_IMAGE_NAME }}:${{ steps.git_hash.outputs.GIT_HASH_SHORT }}
+        docker rmi --force ${{ env.DOCKER_HUB_NAMESPACE }}/${{ env.DOCKER_HUB_IMAGE_NAME }}:ci-build-${{ steps.git_hash.outputs.GIT_HASH_SHORT }}
       continue-on-error: true
 
   image_build_publish:
