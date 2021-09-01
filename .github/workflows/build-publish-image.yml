@@ -55,14 +55,32 @@ jobs:
       id: inspect
       run: |
         echo ::set-output name=REPORT::$(docker buildx imagetools inspect ${{ env.DOCKER_HUB_NAMESPACE }}/${{ env.DOCKER_HUB_IMAGE_NAME }}:ci-build-${{ steps.git_hash.outputs.GIT_HASH_SHORT }})
-    
+
     - name: Image inspect report -> PR comment
-      uses: allthatjazzleo/actions-pull-request-add-comment@v1
+      uses: actions/github-script@v4.1.0
+      env:
+        INSPECT: "docker buildx\n${{ steps.inspect.outputs.REPORT }}"
       with:
-        message: |
-          Docker Buildx Inspect Report for ${{ env.DOCKER_HUB_NAMESPACE }}/${{ env.DOCKER_HUB_IMAGE_NAME }}:ci-build-${{ steps.git_hash.outputs.GIT_HASH_SHORT }}:
-          ${{ steps.inspect.outputs.REPORT }}
-        GITHUB_TOKEN: ${{ github.token }}
+        github-token: ${{ github.token }}
+        script: |
+          const output = `### Docker Buildx Inspect Report for ${{ env.DOCKER_HUB_NAMESPACE }}/${{ env.DOCKER_HUB_IMAGE_NAME }}:ci-build-${{ steps.git_hash.outputs.GIT_HASH_SHORT }} 🕵🏾\`${{ steps.isnpect.outcome }}\`
+
+          <details><summary>Show Inspection Report</summary>
+
+          \`\`\`\n
+          ${process.env.INSPECT}
+          \`\`\`
+
+          </details>
+
+          *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Workflow: \`${{ github.workflow }}\`*`;
+        
+          github.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: output
+          })
 
     - name: Scan Image
       uses: snyk/actions/docker@master
